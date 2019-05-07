@@ -1,4 +1,4 @@
 *.pyc
 db.sqlite3
-blog_site/settings.py
+blog_site/secret.py
 blog/migrations/**
