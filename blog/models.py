@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User as DjUser
+from django.contrib.auth.models import AbstractUser
 
 
-class User(DjUser):
+class User(AbstractUser):
     subscriptions = models.ManyToManyField('self', blank=True, default=None, symmetrical=False)
     seen_posts = models.ManyToManyField('Blog_record', blank=True, default=None)
 
