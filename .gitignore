@@ -1,0 +1,4 @@
+*.pyc
+db.sqlite3
+blog_site/settings.py
+blog/migrations/**
