@@ -24,6 +24,20 @@ class UserView(View):
         })
 
 
+class SubscribeToUser(View):
+    def get(self, request, username):
+        current_user = User.objects.get(username=request.user.get_username())
+        user_to_subscribe = User.objects.get(username=username)
+        if current_user.subscriptions.filter(username=username):
+            current_user.subscriptions.remove(user_to_subscribe)
+        else:
+            current_user.subscriptions.add(user_to_subscribe)
+        return HttpResponseRedirect(reverse(
+            'blog:user_page',
+            kwargs={'username': username}
+        ))
+
+
 class SubscriptionsView(LoginRequiredMixin, View):
     def get(self, request):
         current_user = User.objects.get(username=request.user.get_username())
