@@ -54,7 +54,14 @@ class BlogView(LoginRequiredMixin, View):
                 author=author
             )
             new_blog_record.save()
-        return HttpResponseRedirect(reverse('blog:user_blog'))
+            return HttpResponseRedirect(reverse('blog:user_blog'))
+        else:
+            current_user = User.objects.get(username=request.user.get_username())
+            records = Blog_record.objects.filter(author=current_user).order_by('-creation_date')
+            return render(request, 'blog/blog.html', {
+                'records': records,
+                'form': form
+            })
 
 
 def index(request):
