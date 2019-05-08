@@ -6,18 +6,43 @@
     {% load staticfiles %}
     <link rel="shortcut icon" href="{% static 'blog/source/icon.png' %}" type="image/png">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/style/style.css' %}" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-    {% for record in records %}
-    <div class="record">
-        <h1>{{record.title}}</h1> 
-        {{ record.creation_date }}
-        <br>
-        <a href="{% url 'blog:user_page' record.author %}">{{record.author}}</a>
-        {{record.text}}
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                {% block title %}
+                <div id="list-example" class="list-group">
+                    <a class="list-group-item list-group-item-action" href="{% url 'blog:index' %}">Главная</a>
+                    <a class="list-group-item list-group-item-action" href="{% url 'blog:subscriptions_page' %}">Мои подписки</a>
+                    <a class="list-group-item list-group-item-action" href="{% url 'blog:user_blog' %}">Мой блог</a>
+                    {% block subscribe %}
+                    {% endblock %}
+                    <a class="list-group-item list-group-item-action" href="{% url 'login' %}">Войти</a>
+                    <a class="list-group-item list-group-item-action" href="{% url 'logout' %}">Выйти</a>
+                </div>
+                {% endblock %}
+            </div>
+            <div class="col-md-auto">
+                {% block post %}
+                {% endblock %}
+                {% block content %}
+                {% for record in records %}
+                <div class="record">
+                    <h1>{{record.title}}</h1>
+                    {{ record.creation_date }}
+                    <br>
+                    <a href="{% url 'blog:user_page' record.author %}">{{record.author}}</a>
+                    {{record.text}}
+                </div>
+                {% endfor %}
+                {% endblock %}
+            </div>
+        </div>
     </div>
-    {% endfor %}
 </body>
 
 </html>
