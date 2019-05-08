@@ -1,4 +1,10 @@
 {% extends "blog/index.html" %}
 {% block subscribe %}
- <a class="list-group-item list-group-item-action" href="{% url 'blog:subscribe_to_user' request.resolver_match.kwargs.username %}" style="background-color: gold">Подписаться</a>
+{% if user.is_authenticated %}
+{% if is_subscribed %}
+<a class="list-group-item list-group-item-action" href="{% url 'blog:subscribe_to_user' request.resolver_match.kwargs.username %}" style="background-color: gold">Подписаться</a>
+{% else %}
+<a class="list-group-item list-group-item-action" href="{% url 'blog:subscribe_to_user' request.resolver_match.kwargs.username %}" style="background-color: red">Отписаться</a>
+{% endif %}
+{% endif %}
 {% endblock %}

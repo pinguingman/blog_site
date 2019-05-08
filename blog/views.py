@@ -31,13 +31,17 @@ class UserView(View):
         # redirect to 'blog:user_blog' if user try to get own page.
         if username == request.user.get_username():
             return HttpResponseRedirect(reverse('blog:user_blog'))
+        # check subscription
+        current_user = User.objects.get(username=request.user.get_username())
+        is_subscribed = bool(not current_user.subscriptions.filter(username=username))
         records = Blog_record.objects.filter(author__username=username).order_by('-creation_date')
         return render(request, 'blog/user_page.html', {
             'records': records,
+            'is_subscribed': is_subscribed
         })
 
 
-class SubscribeToUser(View):
+class SubscribeToUser(LoginRequiredMixin, View):
     """
     Subscribe logged user to selected user.
     Redirect to selected user page.
