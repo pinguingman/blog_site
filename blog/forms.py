@@ -2,6 +2,10 @@ from django import forms
 
 
 class MessageForm(forms.Form):
+    """
+    Form for new blog record.
+    """
+
     title = forms.CharField(
         max_length=100,
         label='Заголовок сообщения.',

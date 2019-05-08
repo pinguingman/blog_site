@@ -1,14 +1,19 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, TemplateView, View
+from django.views.generic import View
 
 from blog.models import Blog_record, User
 from .forms import MessageForm
 
 
 class IndexView(View):
+    """
+    Index page view.
+    Return all posts in reverse chronological order.
+    """
+
     def get(self, request):
         records = Blog_record.objects.all().order_by('-creation_date')
         return render(request, 'blog/index.html', {
@@ -17,6 +22,11 @@ class IndexView(View):
 
 
 class UserView(View):
+    """
+    Selected user page.
+    Return all posts in reverse chronological order.
+    """
+
     def get(self, request, username):
         records = Blog_record.objects.filter(author__username=username).order_by('-creation_date')
         return render(request, 'blog/user_page.html', {
@@ -25,6 +35,11 @@ class UserView(View):
 
 
 class SubscribeToUser(View):
+    """
+    Subscribe logged user to selected user.
+    Redirect to selected user page.
+    """
+
     def get(self, request, username):
         current_user = User.objects.get(username=request.user.get_username())
         user_to_subscribe = User.objects.get(username=username)
@@ -39,6 +54,11 @@ class SubscribeToUser(View):
 
 
 class SubscriptionsView(LoginRequiredMixin, View):
+    """
+    Subscriptions page.
+    Return all subscribed users posts in reverse chronological order.
+    """
+
     def get(self, request):
         current_user = User.objects.get(username=request.user.get_username())
         users = current_user.subscriptions.all()
@@ -49,6 +69,12 @@ class SubscriptionsView(LoginRequiredMixin, View):
 
 
 class BlogView(LoginRequiredMixin, View):
+    """
+    Logged user page.
+    GET - return logged user posts and new post form.
+    POST - create new post and redirect to GET.
+    """
+
     def get(self, request):
         current_user = User.objects.get(username=request.user.get_username())
         records = Blog_record.objects.filter(author=current_user).order_by('-creation_date')
@@ -76,7 +102,3 @@ class BlogView(LoginRequiredMixin, View):
                 'records': records,
                 'form': form
             })
-
-
-def index(request):
-    return HttpResponse('index')

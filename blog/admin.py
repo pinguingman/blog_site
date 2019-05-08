@@ -4,6 +4,9 @@ from .models import Blog_record, User
 
 
 class CustomUserAdmin(UserAdmin):
+    """
+    Filter unused User fields.
+    """
     list_display = ['username', 'email']
     fieldsets = (
         (None, {
