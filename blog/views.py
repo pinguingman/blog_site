@@ -28,13 +28,16 @@ class UserView(View):
     """
 
     def get(self, request, username):
+        records = Blog_record.objects.filter(author__username=username).order_by('-creation_date')
         # redirect to 'blog:user_blog' if user try to get own page.
-        if username == request.user.get_username():
+        if request.user.is_authenticated() and username == request.user.get_username():
             return HttpResponseRedirect(reverse('blog:user_blog'))
         # check subscription
-        current_user = User.objects.get(username=request.user.get_username())
-        is_subscribed = bool(not current_user.subscriptions.filter(username=username))
-        records = Blog_record.objects.filter(author__username=username).order_by('-creation_date')
+        if request.user.is_authenticated():
+            current_user = User.objects.get(username=request.user.get_username())
+            is_subscribed = bool(not current_user.subscriptions.filter(username=username))
+        else:
+            is_subscribed = False
         return render(request, 'blog/user_page.html', {
             'records': records,
             'is_subscribed': is_subscribed
