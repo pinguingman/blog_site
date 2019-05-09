@@ -33,13 +33,8 @@
                 {% block content %}
                 {% for record in records %}
                 <div class="record" id="{{ record.pk }}">
-                    <div onclick="markAsSeen('{{ request.user.get_username }}','{{ record.pk }}');">
-                    {% if request.user in record.user_set.all %}
-                    <img src="{% static 'blog/source/eye.png' %}" class="eye" switch="{% static 'blog/source/eye-closed.png' %}">
-                    {% else %}
-                    <img src="{% static 'blog/source/eye-closed.png' %}" class="eye" switch="{% static 'blog/source/eye.png' %}">
-                    {% endif %}
-                    </div>
+                    {% block eyes %}
+                    {% endblock %}
                     <h1>{{record.title}}</h1>
                     {{ record.creation_date }}
                     <br>

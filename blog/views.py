@@ -46,7 +46,7 @@ class UserView(View):
 
 class SubscribeToUser(LoginRequiredMixin, View):
     """
-    Subscribe logged user to selected user.
+    Subscribe/unsubscribe logged user to selected user.
     Redirect to selected user page.
     """
 
@@ -54,8 +54,12 @@ class SubscribeToUser(LoginRequiredMixin, View):
         current_user = User.objects.get(username=request.user.get_username())
         user_to_subscribe = User.objects.get(username=username)
         if current_user.subscriptions.filter(username=username):
+            # Unsubscribe and remove seen posts.
+            all_user_posts = Blog_record.objects.filter(author=user_to_subscribe)
+            current_user.seen_posts.remove(*all_user_posts)
             current_user.subscriptions.remove(user_to_subscribe)
         else:
+            # Subscribe.
             current_user.subscriptions.add(user_to_subscribe)
         return HttpResponseRedirect(reverse(
             'blog:user_page',

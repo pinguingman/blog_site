@@ -1,1 +1,11 @@
 {% extends "blog/index.html" %}
+{% load staticfiles %}
+{% block eyes %}
+<div onclick="markAsSeen('{{ request.user.get_username }}','{{ record.pk }}');">
+{% if request.user in record.user_set.all %}
+<img src="{% static 'blog/source/eye.png' %}" class="eye" switch="{% static 'blog/source/eye-closed.png' %}">
+{% else %}
+<img src="{% static 'blog/source/eye-closed.png' %}" class="eye" switch="{% static 'blog/source/eye.png' %}">
+{% endif %}
+</div>
+{% endblock %}
