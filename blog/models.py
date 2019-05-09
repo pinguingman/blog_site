@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-from django.core.mail import send_mail
-from blog_site.settings import EMAIL_HOST_USER
+
+
+from .send_emails import send_emails
 
 
 class User(AbstractUser):
@@ -12,22 +13,6 @@ class User(AbstractUser):
     """
     subscriptions = models.ManyToManyField('self', blank=True, default=None, symmetrical=False)
     seen_posts = models.ManyToManyField('Blog_record', blank=True, default=None)
-
-
-def send_emails(emails, author, title):
-    """
-    Send emails to given addresses with author and title.
-    """
-    subject = 'New post by %s' % author.capitalize()
-    message = '%s wrote a new post with the title: %s' % (author.capitalize(), title)
-    print('Sending emails to ', emails)
-    send_mails_count = send_mail(
-        subject=subject,
-        message=message,
-        from_email=EMAIL_HOST_USER,
-        recipient_list=emails
-    )
-    print('Successfully sent %s - letters' % send_mails_count)
 
 
 class Blog_record(models.Model):
