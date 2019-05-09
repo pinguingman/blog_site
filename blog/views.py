@@ -54,7 +54,7 @@ class SubscribeToUser(LoginRequiredMixin, View):
 
     def get(self, request, username):
         current_user = User.objects.get(username=request.user.get_username())
-        user_to_subscribe = User.objects.get(username=username)
+        user_to_subscribe = get_object_or_404(User, username=username)
         if user_to_subscribe == current_user:
             return HttpResponseRedirect(reverse('blog:user_blog'))
         if current_user.subscriptions.filter(username=username):
@@ -128,8 +128,8 @@ class MarkRecord(View):
     """
 
     def get(self, request, username, record_id):
-        current_user = User.objects.get(username=username)
-        current_record = Blog_record.objects.get(pk=record_id)
+        current_user = get_object_or_404(User, username=username)
+        current_record = get_object_or_404(Blog_record, pk=record_id)
         if current_record.user_set.filter(username=username):
             current_record.user_set.remove(current_user)
         else:
