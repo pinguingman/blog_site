@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -29,6 +29,8 @@ class UserView(View):
 
     def get(self, request, username):
         records = Blog_record.objects.filter(author__username=username).order_by('-creation_date')
+        # 404 if user does not exist
+        selected_user = get_object_or_404(User, username=username)
         # redirect to 'blog:user_blog' if user try to get own page.
         if request.user.is_authenticated() and username == request.user.get_username():
             return HttpResponseRedirect(reverse('blog:user_blog'))
@@ -53,6 +55,8 @@ class SubscribeToUser(LoginRequiredMixin, View):
     def get(self, request, username):
         current_user = User.objects.get(username=request.user.get_username())
         user_to_subscribe = User.objects.get(username=username)
+        if user_to_subscribe == current_user:
+            return HttpResponseRedirect(reverse('blog:user_blog'))
         if current_user.subscriptions.filter(username=username):
             # Unsubscribe and remove seen posts.
             all_user_posts = Blog_record.objects.filter(author=user_to_subscribe)

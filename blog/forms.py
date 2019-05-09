@@ -14,5 +14,6 @@ class MessageForm(forms.Form):
     text = forms.CharField(
         max_length=1000,
         label='Текст сообщения.',
+        widget=forms.Textarea(attrs={'rows': 4, 'cols': 30}),
         error_messages={'required': 'Вы должны ввести текст сообщения.'}
     )

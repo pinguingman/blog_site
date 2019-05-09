@@ -31,7 +31,8 @@ class Blog_record(models.Model):
         """
         subscribers = User.objects.filter(subscriptions=self.author)
         emails = [x.email for x in subscribers if x.email]
-        send_emails(emails, self.author.username, self.title)
+        if emails:
+            send_emails(emails, self.author.username, self.title)
         super().save(args, kwargs)
 
     def __str__(self):
