@@ -37,7 +37,7 @@ class UserView(View):
         # check subscription
         if request.user.is_authenticated():
             current_user = User.objects.get(username=request.user.get_username())
-            is_subscribed = bool(not current_user.subscriptions.filter(username=username))
+            is_subscribed = not current_user.subscriptions.filter(username=username).exists()
         else:
             is_subscribed = False
         return render(request, 'blog/user_page.html', {
@@ -134,4 +134,4 @@ class MarkRecord(View):
             current_record.user_set.remove(current_user)
         else:
             current_record.user_set.add(current_user)
-        return HttpResponse('Ok')
+        return HttpResponse(status=200)

@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractUser
 
 from .send_emails import send_emails
 
+import threading
+
 
 class User(AbstractUser):
     """
@@ -32,7 +34,8 @@ class Blog_record(models.Model):
         subscribers = User.objects.filter(subscriptions=self.author)
         emails = [x.email for x in subscribers if x.email]
         if emails:
-            send_emails(emails, self.author.username, self.title)
+            thread = threading.Thread(target=send_emails, args=(emails, self.author.username, self.title,))
+            thread.start()
         super().save(args, kwargs)
 
     def __str__(self):
