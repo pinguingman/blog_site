@@ -26,4 +26,12 @@ a,
     border: 4px double black;
     background: #d3dde7;
     border-radius: 10px;
+    position: relative;
+}
+
+.eye {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    height: 30px;
 }

@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^user/(?P<username>\w+)/$', views.UserView.as_view(), name='user_page'),
     # link to subscribe to selected user
     url(r'^user/(?P<username>\w+)/subscribe/$', views.SubscribeToUser.as_view(), name='subscribe_to_user'),
+    # mark record as seen
+    url(r'^user/(?P<username>\w+)/record/(?P<record_id>\d+)/$', views.MarkRecord.as_view(), name='mark_record'),
 ]

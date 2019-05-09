@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -112,3 +112,18 @@ class BlogView(LoginRequiredMixin, View):
                 'records': records,
                 'form': form
             })
+
+
+class MarkRecord(View):
+    """
+    Mark record as seen by current user.
+    """
+
+    def get(self, request, username, record_id):
+        current_user = User.objects.get(username=username)
+        current_record = Blog_record.objects.get(pk=record_id)
+        if current_record.user_set.filter(username=username):
+            current_record.user_set.remove(current_user)
+        else:
+            current_record.user_set.add(current_user)
+        return HttpResponse('Ok')

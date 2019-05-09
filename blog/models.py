@@ -33,3 +33,6 @@ class Blog_record(models.Model):
         emails = [x.email for x in subscribers if x.email]
         send_emails(emails, self.author.username, self.title)
         super().save(args, kwargs)
+
+    def __str__(self):
+        return self.title
