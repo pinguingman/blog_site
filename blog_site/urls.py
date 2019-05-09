@@ -23,5 +23,5 @@ urlpatterns = [
     # includes django admin
     url(r'^admin/', admin.site.urls),
     # includes django accounts management
-    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
